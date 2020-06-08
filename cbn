@@ -5,7 +5,7 @@
 
 import os
 import sys
-
+from pathlib import Path
 if len(sys.argv) != 2:
     print("Format: script directory")
     sys.exit()
@@ -21,10 +21,10 @@ for filename in files:
     filepath = os.path.join(dirpath, filename)
     if os.path.islink(filepath):
         linkedfile = os.readlink(filepath)
-        linkedfileabs = os.path.abspath(linkedfile)
+        linkedfileabs = os.path.realpath(linkedfile)
         print(linkedfile)
         print(linkedfileabs)
         if os.path.isfile(linkedfileabs) and not os.access(linkedfileabs, os.W_OK):
             os.unlink(filepath)
-            os.link(linkedfileabs, filepath)
+            os.symlink(linkedfileabs, filepath)
             print('Changed: ' + linkedfileabs)
