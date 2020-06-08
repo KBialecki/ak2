@@ -24,7 +24,6 @@ for filename in files:
         print(linkedfile)
         # ścieżka bezwzględna
         linkedfilepath = os.path.abspath(linkedfile)
-        print(linkedfile)
         if os.path.isfile(linkedfile) and not os.access(linkedfile, os.W_OK):
             os.unlink(filepath)
             os.link(linkedfile, filepath)
