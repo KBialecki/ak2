@@ -1,0 +1,31 @@
+# Cwiczenie 6:
+# W zadanym katalogu przerób wszystkie dowiązania symboliczne wskazujące na pliki regularne
+# (do których wykonujący skrypt nie ma prawa zapisu), tak aby ścieżki w dowiązaniach były bezwzględne.
+
+
+import os
+import sys
+
+if len(sys.argv) != 2:
+    print("Format: script directory")
+    sys.exit()
+elif not os.path.isdir(sys.argv[1]):
+    print("Arg 1 not a directory")
+    sys.exit()
+
+dirpath = os.path.abspath(sys.argv[1])
+
+files = os.listdir(dirpath)
+
+for filename in files:
+    filepath = os.path.join(dirpath, filename)
+    if os.path.islink(filepath):
+        linkedfile = os.readlink(filepath)
+        print(linkedfile)
+        # ścieżka bezwzględna
+        linkedfilepath = os.path.abspath(linkedfile)
+        print(linkedfile)
+        if os.path.isfile(linkedfile) and not os.access(linkedfile, os.W_OK):
+            os.unlink(filepath)
+            os.link(linkedfile, filepath)
+            print('Changed: ' + linkedfile)
